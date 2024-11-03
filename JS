@@ -1,0 +1,67 @@
+// Array untuk menyimpan data karyawan
+let employees = [];
+
+// Fungsi untuk menambahkan data karyawan
+function addEmployee(event) {
+    event.preventDefault();
+
+    // Mendapatkan nilai dari form input
+    const name = document.getElementById("name").value;
+    const position = document.getElementById("position").value;
+    const division = document.getElementById("division").value;
+
+    // Menambahkan data baru ke array employees
+    employees.push({ name, position, division });
+
+    // Membersihkan form setelah submit
+    document.getElementById("employeeForm").reset();
+
+    // Update tabel untuk menampilkan data baru
+    displayEmployees();
+}
+
+// Fungsi untuk menampilkan data karyawan pada tabel
+function displayEmployees() {
+    const employeeTable = document.getElementById("employeeTable");
+
+    // Kosongkan tabel sebelum update
+    employeeTable.innerHTML = "";
+
+    // Iterasi setiap karyawan untuk dimasukkan ke dalam tabel
+    employees.forEach((employee, index) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${employee.name}</td>
+            <td>${employee.position}</td>
+            <td>${employee.division}</td>
+            <td>
+                <button class="btn btn-warning btn-sm" onclick="editEmployee(${index})">Edit</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteEmployee(${index})">Hapus</button>
+            </td>
+        `;
+
+        employeeTable.appendChild(row);
+    });
+}
+
+// Fungsi untuk menghapus data karyawan berdasarkan index
+function deleteEmployee(index) {
+    employees.splice(index, 1);
+    displayEmployees();
+}
+
+// Fungsi untuk mengedit data karyawan
+function editEmployee(index) {
+    const employee = employees[index];
+
+    document.getElementById("name").value = employee.name;
+    document.getElementById("position").value = employee.position;
+    document.getElementById("division").value = employee.division;
+
+    deleteEmployee(index);
+}
+
+// Event listener untuk menambah karyawan ketika form disubmit
+document.getElementById("employeeForm").addEventListener("submit", addEmployee);
